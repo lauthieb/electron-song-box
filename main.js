@@ -7,6 +7,8 @@ const path = require('path');
 const url = require('url');
 const ipcMain = electron.ipcMain;
 const globalShortcut = electron.globalShortcut;
+const configuration = require('./configuration');
+
 let mainWindow;
 let settingsWindow;
 
@@ -29,17 +31,26 @@ function createWindow () {
     });
 }
 
-function createShortcuts() {
+function setGlobalShortcuts() {
+    globalShortcut.unregisterAll();
+
+    const shortcutKeysSetting = configuration.readSettings('shortcutKeys');
+    const shortcutPrefix = shortcutKeysSetting.length === 0 ? '' : shortcutKeysSetting.join('+') + '+';
+
     for (let i = 1; i <= 6 ; i++) {
-        globalShortcut.register('ctrl+shift+' + i, () => {
+        globalShortcut.register(shortcutPrefix + i, () => {
             mainWindow.webContents.send('global-shortcut', i-1);
         });
     }
 }
 
 app.on('ready', () => {
+    if (!configuration.readSettings('shortcutKeys')) {
+        configuration.saveSettings('shortcutKeys', ['ctrl', 'shift']);
+    }
+
     createWindow();
-    createShortcuts();
+    setGlobalShortcuts();
 });
 
 app.on('window-all-closed', function () {
@@ -85,5 +96,9 @@ ipcMain.on('close-settings-window', function () {
     if (settingsWindow) {
         settingsWindow.close();
     }
+});
+
+ipcMain.on('set-global-shortcuts', function () {
+    setGlobalShortcuts();
 });
 

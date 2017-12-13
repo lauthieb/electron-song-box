@@ -6,6 +6,7 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 const ipcMain = electron.ipcMain;
+const globalShortcut = electron.globalShortcut;
 let mainWindow;
 
 function createWindow () {
@@ -27,7 +28,18 @@ function createWindow () {
     });
 }
 
-app.on('ready', createWindow);
+function createShortcuts() {
+    for (let i = 1; i <= 6 ; i++) {
+        globalShortcut.register('ctrl+shift+' + i, () => {
+            mainWindow.webContents.send('global-shortcut', i-1);
+        });
+    }
+}
+
+app.on('ready', () => {
+    createWindow();
+    createShortcuts();
+});
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {

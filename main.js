@@ -5,6 +5,7 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
+const ipcMain = electron.ipcMain;
 let mainWindow;
 
 function createWindow () {
@@ -38,4 +39,8 @@ app.on('activate', function () {
     if (mainWindow === null) {
         createWindow()
     }
+});
+
+ipcMain.on('close-main-window', () => {
+    app.quit();
 });

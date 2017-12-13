@@ -1,5 +1,7 @@
 'use strict';
 
+const electron = require('electron');
+const ipcRenderer = electron.ipcRenderer;
 
 const soundButtons = document.querySelectorAll('.button-sound');
 
@@ -19,3 +21,8 @@ function prepareButton(buttonEl, soundName) {
         audio.play();
     });
 }
+
+const closeEl = document.querySelector('.close');
+closeEl.addEventListener('click', function () {
+    ipcRenderer.send('close-main-window');
+});

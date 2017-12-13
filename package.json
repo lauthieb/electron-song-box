@@ -1,11 +1,20 @@
 {
   "name": "electron-song-box",
-  "version": "0.1.0",
-  "main": "./main.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
+  "repository": "https://github.com/lauthieb/electron-song-box",
+  "keywords": [
+    "Electron",
+    "song",
+    "box"
+  ],
+  "author": "Laurent Thiebault",
+  "license": "MIT",
   "devDependencies": {
-    "electron-prebuilt": "^0.30.8"
+    "electron": "~1.7.8"
   }
 }
